@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Música Favorita - Estudiantes</title>
+    <style>
+        :root {
+            --background-color: #f5f7fa;
+            --text-color: #2d3748;
+            --primary-gradient: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            --song-bg: white;
+            --song-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --btn-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1e1e1e;
+            --text-color: #ffffff;
+            --primary-gradient: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%);
+            --container-bg: rgba(45, 55, 72, 0.9);
+            --box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+            --song-bg: #2d3748;
+            --song-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
+            --btn-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--container-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .song-list li {
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--song-bg);
+            border-radius: 10px;
+            box-shadow: var(--song-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .song-list li .song-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .song-list li .song-info::before {
+            content: '🎵';
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .song-list li .platform-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .song-list li .platform-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .song-list li .platform-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .song-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 12px var(--box-shadow);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            color: white;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: var(--btn-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="theme-toggle-btn" id="theme-toggle">Cambiar Tema</button>
+    
+    <div class="container">
+        <h1>Música Favorita de Estudiantes</h1>
+        
+        <h2>Mis Canciones Favoritas</h2>
+        <ul class="song-list">
+            <li>
+                <div class="song-info">50 Cent - In Da Club</div>
+                <div class="platform-links">
+                    <a href="https://www.youtube.com/watch?v=5qm8PH4xAss&list=RDCUY8qfDcLX0&index=10" target="_blank" class="platform-link">YouTube</a>
+                </div>
+            </li>
+            <li>
+                <div class="song-info">Dr. Dre - Still D.R.E. ft. Snoop Dogg</div>
+                <div class="platform-links">
+                    <a href="https://www.youtube.com/watch?v=_CL6n0FJZpk&list=RDCUY8qfDcLX0&index=11" target="_blank" class="platform-link">YouTube</a>
+                </div>
+            </li>
+            <li>
+                <div class="song-info">After Hours - The Weeknd</div>
+                <div class="platform-links">
+                    <a href="https://www.youtube.com/watch?v=ygTZZpVkmKg" target="_blank" class="platform-link">YouTube</a>
+                </div>
+            </li>
+            <li>
+                <div class="song-info">Up Again! - DLG</div>
+                <div class="platform-links">
+                    <a href="https://youtu.be/yAPAlp74qvA?si=qO7HNzLi9M2igRM_" target="_blank" class="platform-link">YouTube</a>
+                </div>
+            </li>
+        </ul>
+
+        <div class="btn-container">
+            <a href="index2.html" class="btn">Ir a Index2</a>
+        </div>  
+    </div>
+
+    <script>
+        // Verifica el tema almacenado en localStorage o la preferencia del sistema
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+    </script>
+</body>
+</html>
