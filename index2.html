@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSICA</title>
+    <title>GALERÍA DE MÚSICA</title>
     <style>
+        :root {
+            --background-color: #f5f7fa;
+            --text-color: #2d3748;
+            --primary-gradient: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1e1e1e;
+            --text-color: #ffffff;
+            --primary-gradient: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,20 +24,32 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 2rem;
+            margin: 0;
         }
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
 
         h1 {
             font-size: 2.5rem;
-            color: #2d3748;
+            color: var(--text-color);
             text-align: center;
             margin-bottom: 2rem;
             position: relative;
@@ -40,7 +64,7 @@
             transform: translateX(-50%);
             width: 100px;
             height: 4px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             border-radius: 2px;
         }
 
@@ -56,23 +80,72 @@
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 15px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            height: 300px;
         }
 
         .gallery-item img {
             width: 100%;
-            height: 300px;
+            height: 100%;
             object-fit: cover;
-            display: block;
             transition: transform 0.5s ease;
         }
 
+        .description {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            height: 70%;
+            overflow-y: auto;
+        }
+
+        .gallery-item:hover .description {
+            transform: translateY(0);
+        }
+
         .gallery-item:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+
+        .description h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: #ffffff;
+        }
+
+        .description p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .platform-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .platform-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .platform-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .btn-container {
@@ -84,7 +157,7 @@
             padding: 1rem 2rem;
             font-size: 1.1rem;
             color: white;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -98,6 +171,20 @@
             transform: translateY(-2px);
         }
 
+        .theme-toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 1000;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -106,31 +193,79 @@
             .gallery {
                 gap: 1rem;
             }
+
+            .description {
+                height: 80%;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <button class="theme-toggle-btn" id="theme-toggle">Cambiar Tema</button>
+
     <div class="container">
-        <h1>MUSICA</h1>
-        
+        <h1>GALERÍA DE MÚSICA</h1>
+       
         <div class="gallery">
             <div class="gallery-item">
                 <img src="/api/placeholder/400/300" alt="Descripción de la imagen 1">
+                <div class="description">
+                    <h3>Canción 1</h3>
+                    <p>Esta es una descripción detallada de la primera canción. Aquí puedes incluir información sobre el artista, el año de lanzamiento, el género musical, y por qué te gusta esta canción en particular. La descripción se despliega al pasar el mouse sobre la imagen.</p>
+                    <div class="platform-links">
+                        <a href="https://www.youtube.com/" target="_blank" class="platform-link">YouTube</a>
+                    </div>
+                </div>
             </div>
             <div class="gallery-item">
                 <img src="/api/placeholder/400/300" alt="Descripción de la imagen 2">
+                <div class="description">
+                    <h3>Canción 2</h3>
+                    <p>Esta es la descripción de la segunda canción. Puedes hablar sobre el álbum del que proviene, algún dato interesante sobre su creación o el significado que tiene para ti. Recuerda que esta información aparecerá cuando el usuario pase el mouse sobre la imagen.</p>
+                    <div class="platform-links">
+                        <a href="https://www.youtube.com/" target="_blank" class="platform-link">YouTube</a>
+                    </div>
+                </div>
             </div>
             <div class="gallery-item">
-                <img src="/api/placeholder/400/300" alt="Descripción de la imagen 3">
+                <img src="AfterHours.jpg" alt="After Hours - The Weeknd">
+                <div class="description">
+                    <h3>After Hours - The Weeknd</h3>
+                    <p>After Hours es el cuarto álbum de estudio de The Weeknd, lanzado en 2020. Este álbum representa un viaje nocturno a través de las calles de Las Vegas, mezclando elementos de pop, R&B y música electrónica. La producción impecable y las letras emotivas exploran temas de amor tóxico, fama y redención. El álbum incluye éxitos como "Blinding Lights" y "Save Your Tears".</p>
+                    <div class="platform-links">
+                        <a href="https://www.youtube.com/watch?v=ygTZZpVkmKg" target="_blank" class="platform-link">YouTube</a>
+                    </div>
+                </div>
             </div>
             <div class="gallery-item">
-                <img src="/api/placeholder/400/300" alt="Descripción de la imagen 4">
+                <img src="UpAgain.jpg" alt="Up Again! - DLG">
+                <div class="description">
+                    <h3>Up Again! - DLG</h3>
+                    <p>Sencillo de DLG, lanzado en 2018. Del genero R&B/Soul.</p>
+                    <div class="platform-links">
+                        <a href="https://youtu.be/yAPAlp74qvA?si=qO7HNzLi9M2igRM_" target="_blank" class="platform-link">YouTube</a>
+                    </div>
+                </div>
             </div>
         </div>
-        
+        <div class="btn-container
         <div class="btn-container">
             <a href="index1.html" class="btn">Lista de canciones</a>
         </div>
     </div>
+    <script>
+        // Verifica el tema almacenado en localStorage o la preferencia del sistema
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+    </script>
 </body>
 </html>
